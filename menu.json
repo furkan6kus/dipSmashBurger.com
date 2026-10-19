@@ -1,0 +1,74 @@
+{
+  "menuOption": { "price": 150, "includes": "Patates + soft içecek" },
+  "categories": [
+    {
+      "id": "smash",
+      "title": "Smash burgerler",
+      "extra": { "label": "Ekstra 120 gr köfte", "price": 150 },
+      "items": [
+        { "name": "Dip Truffle", "price": 460, "desc": "120 gr köfte, turşu relish, cheddar, trüflü mayonez, karamelize soğan." },
+        { "name": "Dip Mac", "price": 420, "desc": "120 gr köfte, cheddar, mac sos, soğan, turşu, iceberg marul." },
+        { "name": "Cheese Burger", "price": 400, "desc": "120 gr köfte, cheddar, dip sos, soğan, turşu." },
+        { "name": "Dip Jam", "price": 460, "desc": "120 gr köfte, isli çerkez peyniri, acı biber reçeli, kıtır soğan, mayonez." }
+      ]
+    },
+    {
+      "id": "tavuk",
+      "title": "Tavuk burgerler",
+      "extra": { "label": "Ekstra 120 gr tavuk", "price": 100 },
+      "items": [
+        { "name": "Dip Purple", "price": 310, "desc": "120 gr tavuk, mor lahana turşusu, ballı hardal, mayonez." },
+        { "name": "Dip Sorrel", "price": 320, "desc": "120 gr tavuk, yanık kuzu sos, sweet chili sos, turşu relish, iceberg marul." },
+        { "name": "Dip Chicken", "price": 300, "desc": "120 gr tavuk, sweet chili sos, mayonez, turşu." }
+      ]
+    },
+    {
+      "id": "kizartmalar",
+      "title": "Kızartmalar",
+      "items": [
+        { "name": "Sade Patates", "price": 120 },
+        { "name": "Baharatlı Patates", "price": 130 },
+        { "name": "Trüf & Parmesan", "price": 175, "desc": "Trüflü, parmesanlı patates." },
+        { "name": "Mozzarella Sticks", "price": 100, "desc": "4'lü servis edilir." },
+        { "name": "Çıtır Tavuk Parçaları", "price": 250, "desc": "4'lü servis edilir.", "new": true },
+        { "name": "Meat Me Fries", "price": 350 }
+      ]
+    },
+    {
+      "id": "soslar",
+      "title": "Soslar",
+      "items": [
+        { "name": "Trüflü Mayonez", "price": 35 },
+        { "name": "Acı Mayonez", "price": 30 },
+        { "name": "Sweet Chili", "price": 30 },
+        { "name": "Ballı Hardal", "price": 30 },
+        { "name": "Acı Barbekü", "price": 30 }
+      ]
+    },
+    {
+      "id": "icecekler",
+      "title": "İçecekler",
+      "items": [
+        { "name": "Özerhisar Ayran", "price": 80 },
+        { "name": "Coca-Cola", "price": 80 },
+        { "name": "Coca-Cola Zero", "price": 80 },
+        { "name": "Fanta", "price": 80 },
+        { "name": "Fuse Tea", "price": 80 },
+        { "name": "Sprite", "price": 80 },
+        { "name": "Sade Soda", "price": 45 },
+        { "name": "Su", "price": 40 }
+      ]
+    },
+    {
+      "id": "tatli",
+      "title": "Tatlı ve kahve",
+      "items": [
+        { "name": "Chocolate Chip Cookie", "price": 90 },
+        { "name": "Filtre Kahve", "price": 100 },
+        { "name": "Milkshake", "price": 200 },
+        { "name": "Filtre Kahve + Cookie", "price": 180 },
+        { "name": "Milkshake + Cookie", "price": 250 }
+      ]
+    }
+  ]
+}
