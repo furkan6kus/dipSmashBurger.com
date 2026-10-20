@@ -29,17 +29,30 @@ Menünün tek kaynağı `menu.json` dosyasıdır.
 | `scripts/build-menu.mjs` | `menu.json`'u `index.html`'e yazar. |
 | `assets/site.css` | Tüm stiller. Renkler ve yazı boyutları en üstte. |
 | `assets/site.js` | Kayarak belirme, menü çubuğu, "Menü yap" hesaplayıcısı. |
+| `assets/character.js` | Kaydırmayla oynayan karakter. |
+| `assets/character/` | Karakter videosunun kareleri. |
+| `scripts/build-character.py` | Videodan kareleri üretir. |
 | `assets/fonts/` | Indie Flower ve Bricolage Grotesque (ikisi de SIL Open Font License). |
 | `assets/logo.svg`, `assets/favicon.svg` | Logo (PDF'ten vektör olarak çıkarıldı). |
 
-## Fotoğraf ekleme
+## Kaydırınca hareket eden karakter
 
-Burger ve patates alanlarında şimdilik çizimler var (`<figure class="plate" data-photo="...">`).
-Fotoğraf geldiğinde içindeki `<svg>` yerine şunu koymak yeterli:
+Menüde kaydırdıkça Dip'in karakteri burgeri yiyor, patatese, kolaya ve kurabiyeye geçiyor.
+Yukarı kaydırınca geri sarıyor.
 
-```html
-<img src="assets/photos/burger.jpg" alt="Dip Truffle" width="1200" height="900">
+- **Geniş ekranda (900 px ve üstü):** karakter menünün solunda sabit durur.
+- **Telefonda:** burgerler, kızartmalar, içecekler ve tatlı bölümlerinin başında birer pano olur.
+
+Video, sprite dosyalarına çevrilip (`assets/character/480-*.webp`) tuvale kare kare çizilir;
+böylece iPhone'da da akıcı geri sarar. Yeni bir video gelirse:
+
+```bash
+python3 scripts/build-character.py yeni-video.mp4   # ffmpeg ve Pillow gerekir
 ```
+
+Video 1280x720 ise kırpma ayarı (`CROP`) aynen çalışır; farklıysa script'in başından değiştirin.
+Hangi bölümün videonun hangi saniyesine denk geldiği `assets/character.js` içindeki `ANCHORS`
+(masaüstü) ve HTML'deki `data-seg` (telefon) değerlerindedir.
 
 ## Yayına almadan önce onaylanacaklar
 
