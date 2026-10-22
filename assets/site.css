@@ -60,7 +60,8 @@ ul { padding: 0; list-style: none; }
 svg { display: block; }
 a { color: inherit; }
 :target { scroll-margin-top: 5.5rem; }
-#menu { scroll-margin-top: 0; }  /* the menu bar sits at its top */
+#menu { scroll-margin-top: 0; }
+.cat { scroll-margin-top: 5.5rem; }  /* clear of the menu bar */  /* the menu bar sits at its top */
 ::selection { background: var(--orange); color: var(--ink-strong); }
 :focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
@@ -191,6 +192,8 @@ html.spin-open { overflow: hidden; }
 .spin-hint { position: absolute; left: 50%; bottom: 16px; display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 999px; background: var(--ink-strong); color: var(--paper); font-size: var(--step-small); font-weight: 650; white-space: nowrap; transform: translateX(-50%); transition: opacity 400ms ease; pointer-events: none; }
 .spin-hint svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 .spin-stage.is-touched .spin-hint { opacity: 0; }
+.hint-mouse { display: none; }
+@media (hover: hover) and (pointer: fine) { .hint-touch { display: none; } .hint-mouse { display: inline; } }
 .spin-info { padding: 18px 12px 22px; }
 .spin-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
 .spin-name { font-family: var(--font-hand); font-size: var(--step-head); line-height: 1; color: var(--brand); }
