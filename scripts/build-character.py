@@ -1,53 +1,59 @@
-"""Turns the character video into sprite sheets for the scroll-driven character.
+"""Turns the character video into white line frames for the scroll-driven background.
 
 Usage: python3 scripts/build-character.py path/to/video.mp4
 Needs ffmpeg on PATH and Pillow.
 
-Writes assets/character/480-N.webp (25 frames per sheet, 5x5) and
-assets/character/poster.webp. The site draws one frame at a time on a canvas,
-so scrolling can move the video forward and back smoothly on every phone.
+The video's white paper (inside the character too) becomes transparent and the
+lines become white, so the character can sit on the green page. Each frame is a
+small transparent WebP in assets/character/{720,480}/NNN.webp; the site draws
+one at a time on a canvas, so scrolling moves the video forward and back smoothly.
 """
 import glob
 import json
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
 
-from PIL import Image
+from PIL import Image, ImageChops
 
 FPS = 15                 # frames kept per second of video
 CROP = '660:660:300:50'  # w:h:x:y of the square around the character in the 1280x720 source
-COLS = ROWS = 5
-SIZES = (480,)
-POSTER_FRAME = 24        # burger in hand
+SIZES = (720, 480)       # wide screens, phones
 
 root = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 out = os.path.join(root, 'assets', 'character')
-os.makedirs(out, exist_ok=True)
+
+
+def white_lines(im):
+    rgb = im.convert('RGB')
+    lum = rgb.convert('L')
+    # paper is transparent, ink is opaque, the anti-aliased edge in between
+    alpha = lum.point(lambda v: 0 if v >= 238 else (255 if v <= 120 else int((238 - v) / 118 * 255)))
+    # coloured food would turn into solid white shapes: keep it lighter
+    sat = rgb.convert('HSV').split()[1]
+    alpha = ImageChops.multiply(alpha, sat.point(lambda v: 255 - int(min(v, 200) / 200 * 150)))
+    frame = Image.new('RGBA', rgb.size, (255, 255, 255, 0))
+    frame.putalpha(alpha)
+    return frame
+
 
 src = sys.argv[1]
 with tempfile.TemporaryDirectory() as tmp:
-    # crop, push the near-white background to pure white, keep FPS frames per second
-    subprocess.run([
-        'ffmpeg', '-v', 'error', '-i', src, '-an', '-vf',
-        f'fps={FPS},crop={CROP},colorlevels=rimax=0.95:gimax=0.95:bimax=0.95',
-        os.path.join(tmp, '%04d.png'),
-    ], check=True)
+    subprocess.run(['ffmpeg', '-v', 'error', '-i', src, '-an', '-vf', f'fps={FPS},crop={CROP}',
+                    os.path.join(tmp, '%04d.png')], check=True)
     frames = sorted(glob.glob(os.path.join(tmp, '*.png')))
-    per = COLS * ROWS
+    if os.path.isdir(out):
+        shutil.rmtree(out)
     for size in SIZES:
-        for old in glob.glob(os.path.join(out, f'{size}-*.webp')):
-            os.remove(old)
-        for k in range(0, len(frames), per):
-            sheet = Image.new('RGB', (size * COLS, size * ROWS), 'white')
-            for j, f in enumerate(frames[k:k + per]):
-                im = Image.open(f).convert('RGB').resize((size, size), Image.LANCZOS)
-                sheet.paste(im, ((j % COLS) * size, (j // COLS) * size))
-            sheet.save(os.path.join(out, f'{size}-{k // per}.webp'), 'WEBP', quality=62, method=6)
-    Image.open(frames[POSTER_FRAME]).convert('RGB').resize((480, 480), Image.LANCZOS).save(
-        os.path.join(out, 'poster.webp'), 'WEBP', quality=70, method=6)
-    meta = {'frames': len(frames), 'fps': FPS, 'cols': COLS, 'rows': ROWS, 'sizes': list(SIZES)}
+        os.makedirs(os.path.join(out, str(size)))
+    for i, f in enumerate(frames):
+        lines = white_lines(Image.open(f))
+        for size in SIZES:
+            lines.resize((size, size), Image.LANCZOS).save(
+                os.path.join(out, str(size), f'{i:03d}.webp'), 'WEBP', quality=50, alpha_quality=50, method=4)
+    meta = {'frames': len(frames), 'fps': FPS, 'sizes': list(SIZES)}
     with open(os.path.join(out, 'frames.json'), 'w') as fh:
         json.dump(meta, fh)
     print(meta)

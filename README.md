@@ -40,29 +40,29 @@ Menünün tek kaynağı `menu.json` dosyasıdır.
 | `assets/site.css` | Tüm stiller. Renkler ve yazı boyutları en üstte. |
 | `assets/site.js` | Kayarak belirme, menü çubuğu, "Menü yap" hesaplayıcısı. |
 | `assets/character.js` | Kaydırmayla oynayan karakter. |
-| `assets/character/` | Karakter videosunun kareleri. |
+| `assets/character/` | Karakter videosunun kareleri (beyaz çizgi, şeffaf). |
 | `scripts/build-character.py` | Videodan kareleri üretir. |
 | `assets/fonts/` | Indie Flower ve Bricolage Grotesque (ikisi de SIL Open Font License). |
 | `assets/logo.svg`, `assets/favicon.svg` | Logo (PDF'ten vektör olarak çıkarıldı). |
 
 ## Kaydırınca hareket eden karakter
 
-Menüde kaydırdıkça Dip'in karakteri burgeri yiyor, patatese, kolaya ve kurabiyeye geçiyor.
-Yukarı kaydırınca geri sarıyor.
+Menü yeşil zeminde, Dip'in karakteri beyaz çizgilerle arkada duruyor. Kaydırdıkça burgeri yiyor,
+patatese, kolaya ve kurabiyeye geçiyor; yukarı kaydırınca geri sarıyor. Menü boyunca hiç kaybolmuyor.
 
-- **Geniş ekranda (900 px ve üstü):** karakter menünün solunda sabit durur.
-- **Telefonda:** burgerler, kızartmalar, içecekler ve tatlı bölümlerinin başında birer pano olur.
+- **Geniş ekranda (900 px ve üstü):** karakter solda büyük durur, menü sağ sütunda akar.
+- **Telefonda:** karakter yazıların arkasında, okunurluğu bozmayacak kadar soluk durur.
 
-Video, sprite dosyalarına çevrilip (`assets/character/480-*.webp`) tuvale kare kare çizilir;
-böylece iPhone'da da akıcı geri sarar. Yeni bir video gelirse:
+Videonun beyaz zemini (karakterin içi dahil) silinir, çizgiler beyaz yapılır ve her kare ayrı bir
+şeffaf WebP olarak kaydedilir (`assets/character/720/` masaüstü, `assets/character/480/` telefon).
+Yeni bir video gelirse:
 
 ```bash
-python3 scripts/build-character.py yeni-video.mp4   # ffmpeg ve Pillow gerekir
+python3 scripts/build-character.py yeni-video.mp4   # ffmpeg ve Pillow gerekir, birkaç dakika sürer
 ```
 
 Video 1280x720 ise kırpma ayarı (`CROP`) aynen çalışır; farklıysa script'in başından değiştirin.
-Hangi bölümün videonun hangi saniyesine denk geldiği `assets/character.js` içindeki `ANCHORS`
-(masaüstü) ve HTML'deki `data-seg` (telefon) değerlerindedir.
+Hangi bölümün videonun hangi saniyesine denk geldiği `assets/character.js` içindeki `ANCHORS`'tadır.
 
 ## Yayına almadan önce onaylanacaklar
 

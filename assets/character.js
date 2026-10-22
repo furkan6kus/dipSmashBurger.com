@@ -1,19 +1,23 @@
-// Dip's character eats his way through the menu as you scroll.
-// The video is stored as sprite sheets (assets/character/480-N.webp, 25 frames each, 5x5) and
-// drawn one frame at a time on a canvas, so scrolling moves it forward and back on every phone.
-// Wide screens: one card per sheet stays beside the menu and follows the whole page.
-// Narrow screens: a card at the head of each part plays that part's scene as it passes.
+// Dip's character eats his way through the menu as you scroll, drawn in white lines on the green.
+// Frames are small transparent WebPs (assets/character/{720,480}/NNN.webp) drawn on one fixed
+// canvas, so scrolling moves the video forward and back smoothly on every phone.
+// Each part of the menu is pinned to a moment of the video (ANCHORS): burger, fries, cola, cookie.
 
 (() => {
-  const cards = [...document.querySelectorAll('[data-char]')];
-  if (!cards.length || !window.requestAnimationFrame) return;
+  const stage = document.querySelector('.char-stage');
+  const canvas = stage && stage.querySelector('canvas');
+  if (!canvas || !window.requestAnimationFrame) return;
+  const ctx = canvas.getContext('2d');
 
-  const FPS = 15, FRAMES = 150, COLS = 5, PER = 25, SIZE = 480, END = (FRAMES - 1) / FPS;
-  const SRC = (k) => `assets/character/480-${k}.webp`;
+  const FPS = 15, FRAMES = 150, END = (FRAMES - 1) / FPS;
   const wide = matchMedia('(min-width: 900px)');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  const size = () => (wide.matches ? 720 : 480);
+  const src = (i) => `assets/character/${size()}/${String(i).padStart(3, '0')}.webp`;
 
-  // seconds in the video where each part of the menu starts (wide screens)
+  const q = (s) => document.querySelector(s);
+  const menu = q('#menu');
+  const last = q('.sheet-second .sheet-body');
   const ANCHORS = [
     ['#smash', 'top', 0],
     ['#tavuk', 'top', 2.9],
@@ -23,59 +27,53 @@
     ['#icecekler', 'top', 6.7],
     ['#tatli', 'top', 8.4],
     ['.sheet-second .sheet-body', 'bottom', END],
-  ].map(([sel, edge, t]) => ({ el: document.querySelector(sel), edge, t })).filter((a) => a.el);
+  ].map(([sel, edge, t]) => ({ el: q(sel), edge, t })).filter((a) => a.el);
 
   // with reduced motion: one still per scene, no in-betweens
   const STILLS = [[4.22, 1.9], [6.6, 5.4], [8.4, 7.8], [Infinity, 9.4]];
   const still = (t) => STILLS.find(([until]) => t <= until)[1];
 
-  // ---------- sprite sheets, loaded when needed ----------
-  const sheets = [];
-  const sheet = (k) => {
-    if (k < 0 || k >= Math.ceil(FRAMES / PER)) return null;
-    if (!sheets[k]) {
-      const im = new Image();
+  // ---------- frames: loaded nearest-first once the menu is close ----------
+  let frames = [], loadedSize = 0, wanted = 0, inflight = 0, started = false;
+  function reset() {
+    frames = new Array(FRAMES).fill(null);
+    loadedSize = size();
+    canvas.width = canvas.height = loadedSize;
+    drawn = -1;
+  }
+  function pump() {
+    while (started && inflight < 6) {
+      // the closest frame to where the reader is that is not loaded yet
+      let pick = -1;
+      for (let d = 0; d < FRAMES && pick < 0; d++) {
+        for (const i of [wanted + d, wanted - d]) {
+          if (i >= 0 && i < FRAMES && !frames[i]) { pick = i; break; }
+        }
+      }
+      if (pick < 0) return;
+      const im = new Image(), forSize = loadedSize;
+      frames[pick] = im;
+      inflight++;
+      im.onload = im.onerror = () => {
+        inflight--;
+        if (forSize !== loadedSize) return;
+        im.ready = im.naturalWidth > 0;
+        if (Math.abs(pick - wanted) < 3) kick();
+        pump();
+      };
       im.decoding = 'async';
-      im.onload = () => { im.ready = true; kick(); };
-      im.src = SRC(k);
-      sheets[k] = im;
-    }
-    return sheets[k];
-  };
-  const frameAt = (t) => Math.max(0, Math.min(FRAMES - 1, Math.round(t * FPS)));
-  const sheetOf = (i) => Math.floor(i / PER);
-
-  // ---------- one state per card ----------
-  const states = cards.map((el) => {
-    const canvas = el.querySelector('canvas');
-    const seg = el.dataset.seg ? el.dataset.seg.split(',').map(Number) : null;
-    return { el, canvas, ctx: canvas.getContext('2d'), seg, inline: el.dataset.char === 'inline', cur: seg ? seg[0] : 0, target: seg ? seg[0] : 0, drawn: -1, near: false };
-  });
-
-  // only work on cards that are on or near the screen
-  const io = new IntersectionObserver((entries) => {
-    for (const e of entries) {
-      const s = states.find((x) => x.el === e.target);
-      s.near = e.isIntersecting;
-      if (s.near) warm(s);
-    }
-    kick();
-  }, { rootMargin: '600px 0px' });
-  states.forEach((s) => io.observe(s.el));
-
-  // start loading the frames a card will need before it is reached
-  function warm(s) {
-    if (s.inline) {
-      const [a, b] = s.seg;
-      for (let k = sheetOf(frameAt(a)); k <= sheetOf(frameAt(b)); k++) sheet(k);
-    } else {
-      for (let k = 0; k < Math.ceil(FRAMES / PER); k++) sheet(k);
+      im.src = src(pick);
     }
   }
+  // the nearest frame that has arrived, so the character never disappears while others load
+  function nearestReady(i) {
+    for (let d = 0; d < FRAMES; d++) {
+      for (const j of [i - d, i + d]) if (frames[j] && frames[j].ready) return j;
+    }
+    return -1;
+  }
 
-  const active = (s) => s.near && (s.inline ? !wide.matches : wide.matches);
-
-  // where the page is, in video seconds (wide screens)
+  // ---------- where the reader is, in video seconds ----------
   function pageTime() {
     const ref = innerHeight * 0.45;
     const pts = ANCHORS.map((a) => {
@@ -90,47 +88,34 @@
     return pts[pts.length - 1][1];
   }
 
-  // how far a narrow-screen card has travelled through the screen, in its own scene's seconds
-  function cardTime(s) {
-    const r = s.el.getBoundingClientRect(), vh = innerHeight;
-    const start = vh * 0.92, end = vh * 0.1 - r.height * 0.25;
-    const p = Math.max(0, Math.min(1, (start - r.top) / (start - end)));
-    return s.seg[0] + (s.seg[1] - s.seg[0]) * p;
-  }
-
-  function draw(s, i) {
-    const im = sheet(sheetOf(i));
-    sheet(sheetOf(i) + 1); // the next one, before it is needed
-    if (!im || !im.ready) return false;
-    const j = i % PER, sx = (j % COLS) * SIZE, sy = Math.floor(j / COLS) * SIZE;
-    const { width: w, height: h } = s.canvas;
-    s.ctx.drawImage(im, sx, sy + (s.inline ? 6 : 0), SIZE, h, 0, 0, w, h);
-    s.drawn = i;
-    if (!s.el.classList.contains('is-live')) s.el.classList.add('is-live');
-    return true;
-  }
-
-  let raf = 0;
+  let cur = 0, drawn = -1, raf = 0;
   function kick() { if (!raf) raf = requestAnimationFrame(tick); }
   function tick() {
     raf = 0;
-    let moving = false;
-    const t = wide.matches ? pageTime() : 0;
-    for (const s of states) {
-      if (!active(s)) continue;
-      let target = s.inline ? cardTime(s) : t;
-      if (reduce.matches) { target = still(target); s.cur = target; }
-      s.target = target;
-      // ease toward the scroll position so a fast flick still reads as motion
-      const d = s.target - s.cur;
-      s.cur = Math.abs(d) < 0.02 ? s.target : s.cur + d * 0.22;
-      if (s.cur !== s.target) moving = true;
-      const i = frameAt(s.cur);
-      if (i !== s.drawn) draw(s, i); // if its sheet is still loading, onload calls kick() again
+    if (loadedSize !== size()) { reset(); pump(); }
+    const m = menu.getBoundingClientRect(), l = last.getBoundingClientRect(), vh = innerHeight;
+    // on from the moment the menu comes up until its last part has gone by
+    const on = m.top < vh * 0.75 && l.bottom > vh * 0.25;
+    stage.classList.toggle('is-on', on);
+    if (!started && m.top < vh * 2.5) { started = true; pump(); }
+
+    let target = pageTime();
+    if (reduce.matches) { target = still(target); cur = target; }
+    const d = target - cur;
+    cur = Math.abs(d) < 0.02 ? target : cur + d * 0.2; // ease, so a fast flick still reads as motion
+    const i = Math.max(0, Math.min(FRAMES - 1, Math.round(cur * FPS)));
+    if (i !== wanted) { wanted = i; pump(); }
+
+    const j = frames[i] && frames[i].ready ? i : nearestReady(i);
+    if (j >= 0 && j !== drawn) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(frames[j], 0, 0, canvas.width, canvas.height);
+      drawn = j;
     }
-    if (moving) kick();
+    if (cur !== target) kick(); // a frame still loading calls kick() itself when it arrives
   }
 
+  reset();
   addEventListener('scroll', kick, { passive: true });
   addEventListener('resize', kick);
   wide.addEventListener?.('change', kick);

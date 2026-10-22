@@ -72,6 +72,8 @@
 
   <main id="menu" class="menu">
 
+    <div class="char-stage" aria-hidden="true"><canvas></canvas></div>
+
     <nav class="catnav" aria-label="Menüde gezin">
       <ul class="catnav-list">
         <li><a href="#smash">Burgerler</a></li>
@@ -86,18 +88,12 @@
 
     <!-- ---------- sheet one: the burgers ---------- -->
     <div class="sheet sheet-first">
-      <div class="char-col" aria-hidden="true">
-        <div class="char-sticky">
-          <div class="char-card" data-char="sheet"><img class="char-poster" src="assets/character/poster.webp" alt="" width="480" height="480"><canvas width="480" height="480"></canvas></div>
-        </div>
-      </div>
       <div class="sheet-body">
         <section class="cat" id="smash" aria-labelledby="h-smash">
           <div class="cat-head">
             <h2 class="cat-title" id="h-smash" data-reveal>Smash burgerler</h2>
             <p class="sticker" data-reveal><!-- extra:smash -->Ekstra 120 gr köfte <b>+150 ₺</b><!-- /extra:smash --></p>
           </div>
-          <div class="char-card char-inline" data-char="inline" data-seg="0,4.2" aria-hidden="true"><img class="char-poster" src="assets/character/poster.webp" alt="" width="480" height="480" loading="lazy"><canvas width="480" height="404"></canvas></div>
           <ul class="items items-two" data-stagger>
             <!-- menu:smash -->
         <li class="item">
@@ -184,17 +180,11 @@
 
     <!-- ---------- sheet two: fries, sauces, drinks, sweets ---------- -->
     <div class="sheet sheet-second">
-      <div class="char-col" aria-hidden="true">
-        <div class="char-sticky">
-          <div class="char-card" data-char="sheet"><img class="char-poster" src="assets/character/poster.webp" alt="" width="480" height="480"><canvas width="480" height="480"></canvas></div>
-        </div>
-      </div>
       <div class="sheet-body">
         <section class="cat" id="kizartmalar" aria-labelledby="h-kizartmalar">
           <div class="cat-head">
             <h2 class="cat-title" id="h-kizartmalar" data-reveal>Kızartmalar</h2>
           </div>
-          <div class="char-card char-inline" data-char="inline" data-seg="4.25,6.6" aria-hidden="true"><img class="char-poster" src="assets/character/poster.webp" alt="" width="480" height="480" loading="lazy"><canvas width="480" height="404"></canvas></div>
           <ul class="items items-two" data-stagger>
             <!-- menu:kizartmalar -->
         <li class="item">
@@ -251,7 +241,6 @@
           <div class="cat-head">
             <h2 class="cat-title" id="h-icecekler" data-reveal>İçecekler</h2>
           </div>
-          <div class="char-card char-inline" data-char="inline" data-seg="6.6,8.4" aria-hidden="true"><img class="char-poster" src="assets/character/poster.webp" alt="" width="480" height="480" loading="lazy"><canvas width="480" height="404"></canvas></div>
           <ul class="items items-compact items-two" data-stagger>
             <!-- menu:icecekler -->
         <li class="item">
@@ -286,7 +275,6 @@
           <div class="cat-head">
             <h2 class="cat-title" id="h-tatli" data-reveal>Tatlı ve kahve</h2>
           </div>
-          <div class="char-card char-inline" data-char="inline" data-seg="8.4,10" aria-hidden="true"><img class="char-poster" src="assets/character/poster.webp" alt="" width="480" height="480" loading="lazy"><canvas width="480" height="404"></canvas></div>
           <ul class="items items-two" data-stagger>
             <!-- menu:tatli -->
         <li class="item">

@@ -39,6 +39,7 @@
   --margin: clamp(1rem, 2.2vw, 2rem);
   --gutter: clamp(1rem, 2.4vw, 2.5rem);
   --sheet-w: min(calc(100% - 14vw), 1320px);
+  --menu-w: var(--sheet-w);   /* the menu's frame on the green */
   --sheet-pad: clamp(1.25rem, 6vw, 6rem);
   --section: clamp(6rem, 12vw, 11rem);
 
@@ -128,37 +129,35 @@ a.folder:active { transform: translateY(-3px); }
 @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
 
 /* ============ THE MENU ============ */
-.menu { background: var(--table); padding-bottom: var(--section); }
+/* the menu is set straight on the green; Dip's character, drawn in white lines, eats his way
+   through it behind the text. Hero, letter and postcard sit above him. */
+.hero, .letter, .postcard { position: relative; z-index: 2; }
+.menu { position: relative; background: var(--table); color: var(--paper); padding-bottom: var(--section); }
+.menu > :not(.char-stage) { position: relative; z-index: 1; }
 
-.catnav { position: sticky; top: 0; z-index: 20; width: var(--sheet-w); margin: 0 auto; background: var(--paper); padding: 12px var(--sheet-pad) 10px; }
+/* the front folder of the hero ends in a scalloped paper edge */
+.folder-front::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 18px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 18'%3E%3Cpath d='M0 0A18 18 0 0 0 36 0V18H0z' fill='%2356734f'/%3E%3C/svg%3E") repeat-x; background-size: 36px 18px; }
+
+.char-stage { --char-h: min(calc(100svh - 110px), 46vw); position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0; transition: opacity 500ms ease; }
+.char-stage.is-on { opacity: 0.9; }
+.char-stage canvas { position: absolute; bottom: 0; left: var(--margin); height: var(--char-h); width: auto; aspect-ratio: 1; }
+
+.catnav { position: sticky; top: 0; z-index: 20; width: var(--menu-w); margin: 0 auto; background: var(--table); padding: 12px 0 10px; }
 .catnav-list { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; margin: 0 -10px; padding: 0 10px; }
 .catnav-list::-webkit-scrollbar { display: none; }
-.catnav a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 999px; color: var(--ink); font-weight: 600; font-size: var(--step-body); text-decoration: none; white-space: nowrap; transition: background-color var(--t-hover) ease, color var(--t-hover) ease; }
+.catnav a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 999px; color: var(--paper); font-weight: 600; font-size: var(--step-body); text-decoration: none; white-space: nowrap; transition: background-color var(--t-hover) ease, color var(--t-hover) ease; }
 .catnav a[aria-current="true"] { background: var(--orange); color: var(--ink-strong); }
-@media (hover: hover) and (pointer: fine) { .catnav a:not([aria-current="true"]):hover { background: var(--kraft); } }
+@media (hover: hover) and (pointer: fine) { .catnav a:not([aria-current="true"]):hover { background: rgb(255 255 255 / 0.12); } }
 
-.sheet { position: relative; width: var(--sheet-w); margin: 0 auto; background: var(--paper); color: var(--ink); padding: clamp(48px, 6vw, 96px) var(--sheet-pad) clamp(64px, 8vw, 120px); }
-.sheet-first { padding-top: clamp(40px, 5vw, 80px); }
-/* paper edges: a row of scallops */
-.sheet::after, .postcard-card::before, .sheet-second::before { content: ""; position: absolute; left: 0; right: 0; height: 18px; background-repeat: repeat-x; background-size: 36px 18px; background-position: center; }
-.sheet::after { top: 100%; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 18'%3E%3Cpath d='M0 0h36a18 18 0 0 1-36 0z' fill='%23f6f5f3'/%3E%3C/svg%3E"); }
-.sheet-second::before, .postcard-card::before { bottom: 100%; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 18'%3E%3Cpath d='M0 18h36a18 18 0 0 0-36 0z' fill='%23f6f5f3'/%3E%3C/svg%3E"); }
-
-/* the sheet: the character keeps you company on the left, the menu runs on the right */
-.sheet { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); column-gap: clamp(32px, 4vw, 72px); align-items: stretch; }
-.char-col { grid-column: 1; }
-.sheet-body { grid-column: 2; min-width: 0; }
-.char-sticky { position: sticky; top: 104px; }
-.char-card { position: relative; width: 100%; aspect-ratio: 1; background: #fff; overflow: hidden; }
-.char-card img, .char-card canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
-.char-card img { object-fit: cover; object-position: 50% 0; }
-.char-card canvas { opacity: 0; transition: opacity 240ms ease; }
-.char-card.is-live canvas { opacity: 1; }
-.char-inline { display: none; }
+/* the menu runs in the right-hand column; the character stands in the left */
+.sheet { width: var(--menu-w); margin: 0 auto; padding: clamp(56px, 7vw, 112px) 0 clamp(24px, 3vw, 48px); }
+.sheet-body { width: min(50%, 720px); margin-left: auto; }
+.coupon { width: min(calc(var(--menu-w) * 0.5), 720px); margin-left: auto; margin-right: calc((100% - var(--menu-w)) / 2); }
+.sheet-second { padding-top: 0; }
 
 .cat + .cat { margin-top: clamp(96px, 10vw, 160px); }
 .cat-head { display: flex; flex-wrap: wrap; align-items: center; gap: 18px 28px; margin-bottom: clamp(32px, 3.5vw, 48px); }
-.cat-title { font-family: var(--font-hand); font-size: var(--step-display); line-height: 0.98; color: var(--brand); letter-spacing: -0.01em; }
+.cat-title { font-family: var(--font-hand); font-size: var(--step-display); line-height: 0.98; color: var(--paper); letter-spacing: -0.01em; }
 
 .sticker { display: inline-block; white-space: nowrap; padding: 10px 20px; border-radius: 999px; background: var(--orange); color: var(--ink-strong); font-size: var(--step-body); font-weight: 600; transform: rotate(-2.5deg); }
 .sticker b { font-weight: 800; }
@@ -167,26 +166,25 @@ a.folder:active { transform: translateY(-3px); }
 .item-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; font-size: var(--step-lead); font-weight: 700; line-height: 1.2; letter-spacing: -0.012em; }
 .item-name { min-width: 0; }
 .price { font-variant-numeric: tabular-nums; white-space: nowrap; font-weight: 700; }
-.item-desc { margin-top: 8px; max-width: 46ch; color: var(--ink); font-size: var(--step-body); line-height: 1.5; }
+.item-desc { margin-top: 8px; max-width: 46ch; font-size: var(--step-body); line-height: 1.5; }
 .tag { display: inline-block; margin-left: 10px; padding: 3px 11px 4px; border-radius: 999px; background: var(--orange); color: var(--ink-strong); font-size: var(--step-small); font-weight: 700; letter-spacing: 0; vertical-align: 0.15em; line-height: 1.2; }
 .items-two { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--gutter); }
 .items-compact { gap: 20px; }
 .items-compact .item-head { font-weight: 650; }
 
 /* ============ THE COUPON ============ */
-.coupon { position: relative; width: var(--sheet-w); margin: clamp(72px, 9vw, 128px) auto; display: grid; grid-template-columns: minmax(0, 3.6fr) minmax(0, 8.4fr); background: var(--orange); color: var(--ink-strong); }
-.coupon-stub { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 18px; padding: clamp(32px, 4vw, 56px); border-right: 7px dotted var(--table); }
-.coupon-stub::before, .coupon-stub::after { content: ""; position: absolute; right: -22px; width: 38px; height: 38px; border-radius: 50%; background: var(--table); }
-.coupon-stub::before { top: -19px; }
-.coupon-stub::after { bottom: -19px; }
+.coupon { position: relative; margin-top: clamp(96px, 10vw, 160px); margin-bottom: clamp(96px, 10vw, 160px); color: var(--paper); }
+.coupon-stub { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 16px; padding: clamp(28px, 3.5vw, 48px); background: var(--orange); color: var(--ink-strong); border-bottom: 7px dotted var(--table); }
+.coupon-stub::before, .coupon-stub::after { content: ""; position: absolute; bottom: -22px; width: 38px; height: 38px; border-radius: 50%; background: var(--table); }
+.coupon-stub::before { left: -19px; }
+.coupon-stub::after { right: -19px; }
 .coupon-title { font-family: var(--font-hand); font-size: var(--step-display); line-height: 0.98; padding-bottom: 0.12em; }
 .coupon-price { font-size: var(--step-head); font-weight: 800; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
 .coupon-text { font-size: var(--step-lead); line-height: 1.4; max-width: 24ch; }
 
-.builder { display: grid; grid-template-columns: minmax(0, 1fr) minmax(260px, 300px); gap: clamp(24px, 3vw, 44px); padding: clamp(32px, 4vw, 56px); align-items: start; }
+.builder { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, 280px); gap: clamp(24px, 3vw, 40px); padding: clamp(28px, 3vw, 40px) 0 0; align-items: start; }
 html:not(.js) .builder { display: none; }
-html:not(.js) .coupon { grid-template-columns: 1fr; }
-html:not(.js) .coupon-stub { border-right: 0; }
+html:not(.js) .coupon-stub { border-bottom: 0; }
 html:not(.js) .coupon-stub::before, html:not(.js) .coupon-stub::after { display: none; }
 .field-group { border: 0; padding: 0; margin: 0; min-width: 0; }
 .field-group + .field-group { margin-top: 26px; }
@@ -196,10 +194,10 @@ html:not(.js) .coupon-stub::before, html:not(.js) .coupon-stub::after { display:
 .chip input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
 .chip span { display: inline-flex; align-items: center; gap: 7px; min-height: 44px; padding: 0 16px; border-radius: 999px; background: var(--orange-2); color: var(--ink-strong); font-size: var(--step-body); font-weight: 600; transition: background-color var(--t-hover) ease, color var(--t-hover) ease, transform var(--t-press) var(--ease-out); pointer-events: none; }
 .chip small { font-size: 1em; font-weight: 400; font-variant-numeric: tabular-nums; }
-.chip input:checked + span { background: var(--ink-strong); color: var(--paper); }
-.chip input:focus-visible + span { outline: 3px solid var(--ink-strong); outline-offset: 2px; }
+.chip input:checked + span { background: var(--paper); color: var(--ink-strong); }
+.chip input:focus-visible + span { outline: 3px solid var(--paper); outline-offset: 2px; }
 .chip:active span { transform: scale(0.96); }
-@media (hover: hover) and (pointer: fine) { .chip:hover input:not(:checked) + span { background: var(--paper); } }
+@media (hover: hover) and (pointer: fine) { .chip:hover input:not(:checked) + span { background: var(--orange); } }
 
 .builder-sum { display: none; }
 .receipt { position: sticky; top: 96px; background: var(--paper); color: var(--ink); padding: 26px 24px 30px; margin-bottom: 14px; }
@@ -234,6 +232,7 @@ html:not(.js) .coupon-stub::before, html:not(.js) .coupon-stub::after { display:
 /* ============ THE BACK OF THE CARD ============ */
 .postcard { padding: 18px 0 clamp(40px, 6vw, 80px); background: var(--table); }
 .postcard-card { position: relative; width: var(--sheet-w); margin: 0 auto; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); padding: clamp(56px, 7vw, 104px) var(--sheet-pad) 36px; background: var(--paper); color: var(--ink); }
+.postcard-card::before { content: ""; position: absolute; left: 0; right: 0; bottom: 100%; height: 18px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 18'%3E%3Cpath d='M0 18h36a18 18 0 0 0-36 0z' fill='%23f6f5f3'/%3E%3C/svg%3E") repeat-x; background-size: 36px 18px; background-position: center; }
 .postcard-message { grid-column: 1 / 6; display: grid; gap: 40px; align-content: start; }
 .postcard-title { font-family: var(--font-hand); font-size: var(--step-display); line-height: 0.98; color: var(--brand); }
 .postcard-message p { font-size: var(--step-lead); line-height: 1.45; max-width: 34ch; }
@@ -255,16 +254,18 @@ html:not(.js) .coupon-stub::before, html:not(.js) .coupon-stub::after { display:
   .js .postcard-card:not(.is-in) .stamp { transform: rotate(-14deg) scale(1.3); }
 }
 
-/* ============ NARROW: the character moves into the sections ============ */
+/* ============ NARROW: one column; the character stands behind the text, faint ============ */
 @media (max-width: 899px) {
-  .sheet { display: block; }
-  .char-col { display: none; }
-  .char-inline { display: block; aspect-ratio: 480 / 404; margin: 0 0 32px; }
+  .sheet-body { width: auto; margin-left: 0; }
+  .coupon { width: var(--menu-w); margin-left: auto; margin-right: auto; }
+  .char-stage { --char-h: min(74svh, 150vw); }
+  .char-stage.is-on { opacity: 0.24; }
+  .char-stage canvas { left: 50%; transform: translateX(-50%); }
 }
 
 /* ============ PHONE ============ */
 @media (max-width: 760px) {
-  :root { --sheet-w: calc(100% - 24px); --sheet-pad: 22px; --strip: 50px; --tab: 34px; --front: 128px; }
+  :root { --menu-w: calc(100% - 40px); --sheet-w: calc(100% - 24px); --sheet-pad: 22px; --strip: 50px; --tab: 34px; --front: 128px; }
   .topbar { height: 64px; }
   .topbar-mark svg { width: 34px; height: 38px; }
   .hero-lede { max-width: 26ch; }
@@ -281,12 +282,8 @@ html:not(.js) .coupon-stub::before, html:not(.js) .coupon-stub::after { display:
   .items-compact { gap: 14px; }
   .cat-head { margin-bottom: 24px; }
 
-  .coupon { grid-template-columns: minmax(0, 1fr); }
-  .coupon-stub { border-right: 0; border-bottom: 7px dotted var(--table); padding: 32px 22px 36px; }
-  .coupon-stub::before, .coupon-stub::after { top: auto; bottom: -22px; right: auto; }
-  .coupon-stub::before { left: -19px; }
-  .coupon-stub::after { right: -19px; }
-  .builder { grid-template-columns: minmax(0, 1fr); padding: 32px 22px 40px; }
+  .coupon-stub { padding: 32px 22px 36px; }
+  .builder { grid-template-columns: minmax(0, 1fr); padding: 32px 0 0; }
   .builder-sum { position: sticky; bottom: 12px; z-index: 5; display: flex; justify-content: space-between; align-items: baseline; margin: 8px 0 0; padding: 14px 22px; border-radius: 999px; background: var(--ink-strong); color: var(--paper); font-weight: 700; transition: opacity var(--t-hover) ease, transform var(--t-hover) var(--ease-out); }
   .builder-sum b { font-size: var(--step-lead); font-variant-numeric: tabular-nums; }
   .builder-sum.is-hidden { opacity: 0; transform: translateY(12px); pointer-events: none; }
@@ -313,10 +310,8 @@ html:not(.js) .coupon-stub::before, html:not(.js) .coupon-stub::after { display:
   .items-two { grid-template-columns: minmax(0, 1fr); }
   .builder { grid-template-columns: minmax(0, 1fr); }
   .receipt { position: relative; top: 0; }
-  .coupon { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
   .catnav-list { gap: 2px; }
   .catnav a { padding: 0 11px; }
   .postcard-message { grid-column: 1 / 7; }
   .postcard-address { grid-column: 7 / 13; }
-}
 }
