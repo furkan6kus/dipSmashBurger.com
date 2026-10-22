@@ -37,6 +37,7 @@ Menünün tek kaynağı `menu.json` dosyasıdır.
 | `index.html` | Sayfanın kendisi. Logo ve çizimler içine gömülü SVG. |
 | `menu.json` | Menü ve fiyatlar. |
 | `scripts/build-menu.mjs` | `menu.json`'u `index.html`'e yazar. |
+| `scripts/stamp.mjs` | CSS ve JS dosyalarına yeni sürüm numarası verir; `assets/` değişince çalıştırın ki tarayıcılar eski kopyayı kullanmasın. |
 | `assets/site.css` | Tüm stiller. Renkler ve yazı boyutları en üstte. |
 | `assets/site.js` | Kayarak belirme, menü çubuğu. |
 | `assets/character.js` | Kaydırmayla oynayan karakter. |
