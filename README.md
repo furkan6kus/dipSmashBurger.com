@@ -27,7 +27,7 @@ Menünün tek kaynağı `menu.json` dosyasıdır.
    ```
 
    Bu komut `index.html` içindeki `<!-- menu:... -->` işaretlerinin arasını yeniden yazar
-   (ürünler, ekstra fiyatları, hero'daki fiyat aralıkları, "Menü yap" hesaplayıcısının verisi).
+   (ürünler, ekstra fiyatları ve "Her burger menü olur" notundaki menü fiyatı).
    İşaretlerin dışındaki tasarıma dokunmaz.
 
 ## Dosyalar
@@ -38,12 +38,20 @@ Menünün tek kaynağı `menu.json` dosyasıdır.
 | `menu.json` | Menü ve fiyatlar. |
 | `scripts/build-menu.mjs` | `menu.json`'u `index.html`'e yazar. |
 | `assets/site.css` | Tüm stiller. Renkler ve yazı boyutları en üstte. |
-| `assets/site.js` | Kayarak belirme, menü çubuğu, "Menü yap" hesaplayıcısı. |
+| `assets/site.js` | Kayarak belirme, menü çubuğu. |
 | `assets/character.js` | Kaydırmayla oynayan karakter. |
 | `assets/character/` | Karakter videosunun kareleri (beyaz çizgi, şeffaf). |
 | `scripts/build-character.py` | Videodan kareleri üretir. |
 | `assets/fonts/` | Indie Flower ve Bricolage Grotesque (ikisi de SIL Open Font License). |
 | `assets/logo.svg`, `assets/favicon.svg` | Logo (PDF'ten vektör olarak çıkarıldı). |
+
+## Açılış ekranı
+
+Yeşil zeminde "TASTE THE SMASH. LOVE THE DIP!" sloganı ve turuncu "Menüyü keşfet" butonu var.
+Buton sayfayı menüye kaydırır. Sol üstte dip işareti, sağ üstte Instagram butonu
+(`https://www.instagram.com/dipsmashburger/`) durur.
+
+"Menü yap" hesaplayıcısı ve adisyon şimdilik kaldırıldı. Gerekirse git geçmişinden geri getirilebilir.
 
 ## Kaydırınca hareket eden karakter
 
@@ -67,7 +75,6 @@ Hangi bölümün videonun hangi saniyesine denk geldiği `assets/character.js` i
 ## Yayına almadan önce onaylanacaklar
 
 - **İletişim:** açık adres, çalışma saatleri, telefon (alt kısımda "yakında" yazıyor).
-- **Instagram:** `@dipsmashburger` hesabı tahmin; doğru kullanıcı adı girilmeli.
 - **Dip Sorrel:** menü PDF'inde "yanık kuzu sos" yazıyor, kuzukulağı sos olabilir.
 - **"Neden smash?" metni:** smash tekniğini anlatan örnek metin; işletmenin ağzından onaylanmalı.
 - **Trüf & Parmesan:** "Trüflü, parmesanlı patates." açıklaması tarafımızdan eklendi.

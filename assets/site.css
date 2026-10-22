@@ -1,5 +1,5 @@
 /* Dip Smash Burger: the site is the printed menu.
-   Paper sheets, folders, a coupon and a postcard on the brand's green. */
+   A slogan, the menu set on the brand's green, a letter and a postcard. */
 
 @font-face { font-family: 'Bricolage Grotesque'; font-style: normal; font-weight: 200 800; font-display: swap;
   src: url(fonts/bricolage-latin-ext.woff2) format('woff2');
@@ -43,10 +43,6 @@
   --sheet-pad: clamp(1.25rem, 6vw, 6rem);
   --section: clamp(6rem, 12vw, 11rem);
 
-  --strip: 58px;   /* how much of each folder shows */
-  --tab: 42px;
-  --front: 140px;
-
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --t-press: 140ms;
@@ -64,6 +60,7 @@ ul { padding: 0; list-style: none; }
 svg { display: block; }
 a { color: inherit; }
 :target { scroll-margin-top: 5.5rem; }
+#menu { scroll-margin-top: 0; }  /* the menu bar sits at its top */
 ::selection { background: var(--orange); color: var(--ink-strong); }
 :focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
@@ -74,59 +71,45 @@ a { color: inherit; }
 @media (hover: hover) and (pointer: fine) { .button:hover { background: var(--orange-2); } }
 
 /* ============ FIRST SCREEN ============ */
-.hero { position: relative; display: flex; flex-direction: column; min-height: max(660px, 100svh); background: var(--table); color: var(--paper); overflow: hidden; }
+.hero { position: relative; display: flex; flex-direction: column; min-height: max(560px, 100svh); background: var(--table); color: var(--paper); overflow: hidden; }
 
-.topbar { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 76px; padding: 0 var(--margin); }
-.topbar-link { justify-self: start; font-size: var(--step-body); text-decoration: none; padding: 10px 0; }
-.topbar-link:last-child { justify-self: end; }
-.topbar-mark { display: block; padding: 6px; }
+.topbar { display: flex; justify-content: space-between; align-items: center; height: 76px; padding: 0 var(--margin); }
+.topbar-mark { display: block; padding: 6px; margin-left: -6px; }
 .topbar-mark svg { width: 40px; height: 45px; fill: currentColor; }
-.topbar-link { text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 0.25em; text-decoration-thickness: 0.08em; transition: text-decoration-color var(--t-hover) ease; }
-@media (hover: hover) and (pointer: fine) { .topbar-link:hover { text-decoration-color: currentColor; } }
 
-.hero-title { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: clamp(14px, 2.6svh, 30px); padding: 4px var(--margin) calc(var(--tab) + 28px); text-align: center; }
-.logo { position: relative; height: clamp(170px, 31svh, 360px); aspect-ratio: 300 / 420; }
-.logo svg { width: 100%; height: 100%; fill: var(--paper); }
-.hero-lede { font-size: var(--step-lead); line-height: 1.35; max-width: 32ch; }
+.insta { display: inline-flex; align-items: center; gap: 9px; min-height: 44px; padding: 0 18px 0 14px; border-radius: 999px; border: 2px solid var(--paper); color: var(--paper); font-weight: 650; font-size: var(--step-body); text-decoration: none; transition: background-color var(--t-hover) ease, color var(--t-hover) ease, transform var(--t-press) var(--ease-out); }
+.insta svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; }
+.insta .insta-dot { fill: currentColor; stroke: none; }
+.insta:active { transform: scale(0.96); }
+@media (hover: hover) and (pointer: fine) { .insta:hover { background: var(--paper); color: var(--ink-strong); } }
 
-/* the drip of the p lets go of a drop now and then */
-.drop { /* taste-skill-ignore: a drop forms from nothing at the tip of the drip */ position: absolute; left: 62.6%; top: 77.6%; width: 4.6%; aspect-ratio: 1 / 1.3; background: var(--paper); border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%; transform: translate(-50%, -50%) scale(0); }
-@media (prefers-reduced-motion: no-preference) {
-  .drop { animation: drip 6.5s 1.6s var(--ease-out) infinite; }
-}
-@keyframes drip {
-  0%, 30% { transform: translate(-50%, -50%) scale(0); opacity: 1; } /* taste-skill-ignore */
-  48% { transform: translate(-50%, -20%) scale(1); opacity: 1; }
-  56% { transform: translate(-50%, 10%) scale(1, 1.12); opacity: 1; }
-  74% { transform: translate(-50%, 520%) scale(0.9, 1.15); opacity: 0; }
-  100% { transform: translate(-50%, 520%) scale(0); opacity: 0; } /* taste-skill-ignore */
-}
+.hero-title { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: clamp(40px, 7svh, 72px); padding: 0 var(--margin) calc(76px + 4svh); text-align: center; }
+.slogan { font-family: var(--font-hand); font-size: clamp(3.6rem, 1.2rem + 9.4vw, 10rem); line-height: 0.95; letter-spacing: 0.005em; text-transform: uppercase; }
+.slogan-line { display: block; }
+/* wider screens: one line each; a phone stacks it like a poster */
+@media (min-width: 761px) { .slogan { font-size: min(10rem, 10.6vw); } .slogan-line { white-space: nowrap; } }
+.slogan-dip { display: inline-block; padding: 0.16em 0.2em 0.04em; margin-left: 0.04em; background: var(--orange); color: var(--ink-strong); transform: rotate(-3deg); }
 
-/* the folders: one per part of the menu, the front one is the menu itself */
-.folders { position: relative; flex: none; width: var(--sheet-w); height: calc(var(--strip) * 4 + var(--front)); margin: 0 auto; }
-.folder { --c: var(--paper); position: absolute; left: 0; right: 0; top: calc(var(--i) * var(--strip)); bottom: 0; background: var(--c); color: var(--ink-strong); text-decoration: none; transition: transform 260ms var(--ease-out); }
-.folder:nth-child(1) { --c: var(--orange); }
-.folder:nth-child(2) { --c: var(--sage); }
-.folder:nth-child(3) { --c: var(--kraft); }
-.folder:nth-child(4) { --c: var(--orange-2); }
-.folder-front { --c: var(--paper); padding: 30px var(--sheet-pad) 0; display: flex; align-items: flex-start; gap: 24px; }
-.folder-tab { position: absolute; bottom: 100%; left: var(--x); height: var(--tab); display: flex; align-items: center; padding: 2px 30px 0; background: var(--c); font-size: var(--step-body); font-weight: 650; white-space: nowrap; clip-path: polygon(16px 0, calc(100% - 16px) 0, 100% 100%, 0 100%); }
-.folder-front .folder-tab { left: 0; font-family: var(--font-hand); font-weight: 400; font-size: 1.6rem; padding-inline: 34px; }
-.folder-note { position: absolute; top: 14px; left: calc(var(--x) + 30px); font-size: var(--step-body); }
-@media (hover: hover) and (pointer: fine) {
-  a.folder:hover { transform: translateY(-8px); }
-}
-a.folder:focus-visible { outline-offset: -6px; }
-a.folder:active { transform: translateY(-3px); }
+/* the way into the menu: the loudest thing on the screen */
+.cta { display: inline-flex; align-items: center; gap: 18px; min-height: clamp(64px, 3.6rem + 1vw, 80px); padding: 8px 10px 8px clamp(28px, 2vw + 16px, 40px); border-radius: 999px; background: var(--orange); color: var(--ink-strong); font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.6rem); font-weight: 800; letter-spacing: -0.01em; text-decoration: none; transition: transform var(--t-press) var(--ease-out), background-color var(--t-hover) ease; }
+.cta-arrow { display: grid; place-items: center; width: clamp(48px, 2.6rem + 0.8vw, 60px); aspect-ratio: 1; border-radius: 50%; background: var(--ink-strong); color: var(--paper); }
+.cta-arrow svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.cta:active { transform: scale(0.96); }
+@media (hover: hover) and (pointer: fine) { .cta:hover { background: var(--orange-2); } }
 
 @media (prefers-reduced-motion: no-preference) {
-  .js .folder { animation: folder-in 900ms var(--ease-expo) both; animation-delay: calc(var(--i) * 90ms + 200ms); }
-  .js .hero-lede { animation: rise 800ms var(--ease-out) 120ms both; }
+  html { scroll-behavior: smooth; }
   .js .topbar { animation: fade 700ms ease 80ms both; }
+  .js .slogan-line { animation: rise 900ms var(--ease-expo) both; }
+  .js .slogan-line + .slogan-line { animation-delay: 140ms; }
+  .js .slogan-dip { animation: slap 700ms var(--ease-out) 700ms both; }
+  .js .cta { animation: rise 800ms var(--ease-out) 420ms both; }
+  .cta-arrow svg { animation: nudge 1.8s ease-in-out 1.6s infinite; }
 }
-@keyframes folder-in { from { transform: translateY(70%); } to { transform: none; } }
-@keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+@keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
 @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slap { from { transform: rotate(-14deg) scale(1.5); opacity: 0; } to { transform: rotate(-3deg); opacity: 1; } }
+@keyframes nudge { 0%, 55%, 100% { transform: none; } 25% { transform: translateY(4px); } }
 
 /* ============ THE MENU ============ */
 /* the menu is set straight on the green; Dip's character, drawn in white lines, eats his way
@@ -135,10 +118,7 @@ a.folder:active { transform: translateY(-3px); }
 .menu { position: relative; background: var(--table); color: var(--paper); padding-bottom: var(--section); }
 .menu > :not(.char-stage) { position: relative; z-index: 1; }
 
-/* the front folder of the hero ends in a scalloped paper edge */
-.folder-front::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 18px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 18'%3E%3Cpath d='M0 0A18 18 0 0 0 36 0V18H0z' fill='%2356734f'/%3E%3C/svg%3E") repeat-x; background-size: 36px 18px; }
-
-.char-stage { --char-h: min(calc(100svh - 110px), 46vw); position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0; transition: opacity 500ms ease; }
+.char-stage { --char-h: min(calc(100svh - 110px), 46vw); position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; opacity: 0; transition: opacity 500ms ease; }
 .char-stage.is-on { opacity: 0.9; }
 .char-stage canvas { position: absolute; bottom: 0; left: var(--margin); height: var(--char-h); width: auto; aspect-ratio: 1; }
 
@@ -152,7 +132,7 @@ a.folder:active { transform: translateY(-3px); }
 /* the menu runs in the right-hand column; the character stands in the left */
 .sheet { width: var(--menu-w); margin: 0 auto; padding: clamp(56px, 7vw, 112px) 0 clamp(24px, 3vw, 48px); }
 .sheet-body { width: min(50%, 720px); margin-left: auto; }
-.coupon { width: min(calc(var(--menu-w) * 0.5), 720px); margin-left: auto; margin-right: calc((100% - var(--menu-w)) / 2); }
+.sheet-first { padding-bottom: clamp(96px, 10vw, 160px); }
 .sheet-second { padding-top: 0; }
 
 .cat + .cat { margin-top: clamp(96px, 10vw, 160px); }
@@ -167,55 +147,15 @@ a.folder:active { transform: translateY(-3px); }
 .item-name { min-width: 0; }
 .price { font-variant-numeric: tabular-nums; white-space: nowrap; font-weight: 700; }
 .item-desc { margin-top: 8px; max-width: 46ch; font-size: var(--step-body); line-height: 1.5; }
+.menu-note { margin-top: clamp(56px, 6vw, 88px); display: inline-block; padding: 12px 22px; border-radius: 24px; background: var(--paper); color: var(--ink-strong); font-size: var(--step-body); font-weight: 600; transform: rotate(1.5deg); }
+.menu-note b { font-weight: 800; white-space: nowrap; }
 .tag { display: inline-block; margin-left: 10px; padding: 3px 11px 4px; border-radius: 999px; background: var(--orange); color: var(--ink-strong); font-size: var(--step-small); font-weight: 700; letter-spacing: 0; vertical-align: 0.15em; line-height: 1.2; }
 .items-two { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--gutter); }
 .items-compact { gap: 20px; }
 .items-compact .item-head { font-weight: 650; }
 
-/* ============ THE COUPON ============ */
-.coupon { position: relative; margin-top: clamp(96px, 10vw, 160px); margin-bottom: clamp(96px, 10vw, 160px); color: var(--paper); }
-.coupon-stub { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 16px; padding: clamp(28px, 3.5vw, 48px); background: var(--orange); color: var(--ink-strong); border-bottom: 7px dotted var(--table); }
-.coupon-stub::before, .coupon-stub::after { content: ""; position: absolute; bottom: -22px; width: 38px; height: 38px; border-radius: 50%; background: var(--table); }
-.coupon-stub::before { left: -19px; }
-.coupon-stub::after { right: -19px; }
-.coupon-title { font-family: var(--font-hand); font-size: var(--step-display); line-height: 0.98; padding-bottom: 0.12em; }
-.coupon-price { font-size: var(--step-head); font-weight: 800; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
-.coupon-text { font-size: var(--step-lead); line-height: 1.4; max-width: 24ch; }
-
-.builder { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, 280px); gap: clamp(24px, 3vw, 40px); padding: clamp(28px, 3vw, 40px) 0 0; align-items: start; }
-html:not(.js) .builder { display: none; }
-html:not(.js) .coupon-stub { border-bottom: 0; }
-html:not(.js) .coupon-stub::before, html:not(.js) .coupon-stub::after { display: none; }
-.field-group { border: 0; padding: 0; margin: 0; min-width: 0; }
-.field-group + .field-group { margin-top: 26px; }
-.field-group legend { padding: 0; margin-bottom: 12px; font-weight: 700; font-size: var(--step-body); }
-.chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.chip { position: relative; display: inline-flex; white-space: nowrap; }
-.chip input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
-.chip span { display: inline-flex; align-items: center; gap: 7px; min-height: 44px; padding: 0 16px; border-radius: 999px; background: var(--orange-2); color: var(--ink-strong); font-size: var(--step-body); font-weight: 600; transition: background-color var(--t-hover) ease, color var(--t-hover) ease, transform var(--t-press) var(--ease-out); pointer-events: none; }
-.chip small { font-size: 1em; font-weight: 400; font-variant-numeric: tabular-nums; }
-.chip input:checked + span { background: var(--paper); color: var(--ink-strong); }
-.chip input:focus-visible + span { outline: 3px solid var(--paper); outline-offset: 2px; }
-.chip:active span { transform: scale(0.96); }
-@media (hover: hover) and (pointer: fine) { .chip:hover input:not(:checked) + span { background: var(--orange); } }
-
-.builder-sum { display: none; }
-.receipt { position: sticky; top: 96px; background: var(--paper); color: var(--ink); padding: 26px 24px 30px; margin-bottom: 14px; }
-@media (max-width: 1100px) { .receipt { margin-top: 24px; } }
-.receipt::after { content: ""; position: absolute; top: 100%; left: 0; right: 0; height: 14px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 14'%3E%3Cpath d='M0 0h20L10 14z' fill='%23f6f5f3'/%3E%3C/svg%3E") repeat-x; background-size: 20px 14px; }
-.receipt-title { font-family: var(--font-hand); font-size: var(--step-head); line-height: 1; margin-bottom: 14px; color: var(--brand); }
-.receipt-lines { display: grid; gap: 8px; min-height: 64px; }
-.receipt-lines li { display: flex; justify-content: space-between; gap: 12px; font-size: var(--step-body); line-height: 1.35; }
-.receipt-lines li span:last-child { font-variant-numeric: tabular-nums; white-space: nowrap; }
-.receipt-lines li.is-new { animation: line-in 380ms var(--ease-out); }
-@keyframes line-in { from { opacity: 0; transform: translateX(-8px); } to { opacity: 1; transform: none; } }
-.receipt-total { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-top: 18px; padding-top: 16px; border-top: 5px dotted var(--sage); font-size: var(--step-lead); font-weight: 700; }
-.receipt-total b { font-size: var(--step-lead); font-weight: 800; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; display: inline-block; }
-.receipt-total b.bump { animation: bump 320ms var(--ease-out); }
-@keyframes bump { 40% { transform: scale(1.08); } }
-
 /* ============ THE LETTER ============ */
-.letter { display: flex; flex-direction: column; align-items: center; padding: 0 var(--margin) var(--section); background: var(--table); }
+.letter { display: flex; flex-direction: column; align-items: center; padding: 0 var(--margin) var(--section); background: var(--table); overflow-x: clip; }
 .letter-sheet { width: min(680px, 100%); background: var(--paper); color: var(--ink); padding: clamp(32px, 5vw, 64px); }
 .letter-title { font-family: var(--font-hand); font-size: var(--step-display); line-height: 0.98; color: var(--brand); margin-bottom: 30px; }
 .letter-sheet p:not(.letter-sign) { font-size: var(--step-lead); line-height: 1.55; max-width: 44ch; }
@@ -250,6 +190,7 @@ html:not(.js) .coupon-stub::before, html:not(.js) .coupon-stub::after { display:
   .js [data-reveal] { opacity: 0; transform: translateY(26px); transition: opacity 700ms var(--ease-out), transform 900ms var(--ease-out); transition-delay: calc(var(--i, 0) * 75ms); }
   .js [data-reveal].is-in { opacity: 1; transform: none; }
   .js .sticker[data-reveal].is-in { transform: rotate(-2.5deg); }
+  .js .menu-note[data-reveal].is-in { transform: rotate(1.5deg); }
   .js .stamp { transition: transform 900ms var(--ease-expo) 300ms; }
   .js .postcard-card:not(.is-in) .stamp { transform: rotate(-14deg) scale(1.3); }
 }
@@ -257,7 +198,6 @@ html:not(.js) .coupon-stub::before, html:not(.js) .coupon-stub::after { display:
 /* ============ NARROW: one column; the character stands behind the text, faint ============ */
 @media (max-width: 899px) {
   .sheet-body { width: auto; margin-left: 0; }
-  .coupon { width: var(--menu-w); margin-left: auto; margin-right: auto; }
   .char-stage { --char-h: min(74svh, 150vw); }
   .char-stage.is-on { opacity: 0.24; }
   .char-stage canvas { left: 50%; transform: translateX(-50%); }
@@ -265,14 +205,10 @@ html:not(.js) .coupon-stub::before, html:not(.js) .coupon-stub::after { display:
 
 /* ============ PHONE ============ */
 @media (max-width: 760px) {
-  :root { --menu-w: calc(100% - 40px); --sheet-w: calc(100% - 24px); --sheet-pad: 22px; --strip: 50px; --tab: 34px; --front: 128px; }
+  :root { --menu-w: calc(100% - 40px); --sheet-w: calc(100% - 24px); --sheet-pad: 22px; }
   .topbar { height: 64px; }
   .topbar-mark svg { width: 34px; height: 38px; }
-  .hero-lede { max-width: 26ch; }
-  .folder-tab { font-size: 0.9375rem; padding-inline: 22px; clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 100%, 0 100%); }
-  .folder-front .folder-tab { font-size: 1.4rem; }
-  .folder-front { padding: 24px 22px 0; }
-  .folder-front .button { width: 100%; }
+  .hero-title { padding-bottom: calc(64px + 4svh); }
 
   .catnav { padding: 10px 12px 8px; }
   .catnav a { padding: 0 14px; }
@@ -282,14 +218,6 @@ html:not(.js) .coupon-stub::before, html:not(.js) .coupon-stub::after { display:
   .items-compact { gap: 14px; }
   .cat-head { margin-bottom: 24px; }
 
-  .coupon-stub { padding: 32px 22px 36px; }
-  .builder { grid-template-columns: minmax(0, 1fr); padding: 32px 0 0; }
-  .builder-sum { position: sticky; bottom: 12px; z-index: 5; display: flex; justify-content: space-between; align-items: baseline; margin: 8px 0 0; padding: 14px 22px; border-radius: 999px; background: var(--ink-strong); color: var(--paper); font-weight: 700; transition: opacity var(--t-hover) ease, transform var(--t-hover) var(--ease-out); }
-  .builder-sum b { font-size: var(--step-lead); font-variant-numeric: tabular-nums; }
-  .builder-sum.is-hidden { opacity: 0; transform: translateY(12px); pointer-events: none; }
-  .receipt { position: relative; top: 0; }
-
-
   .postcard-card { grid-template-columns: minmax(0, 1fr); row-gap: 48px; }
   .postcard-message, .postcard-address { grid-column: 1 / -1; }
   .postcard-address { padding-top: 0; }
@@ -298,18 +226,8 @@ html:not(.js) .coupon-stub::before, html:not(.js) .coupon-stub::after { display:
   .address div { grid-template-columns: 6.5rem 1fr; font-size: var(--step-body); }
 }
 
-@media (max-width: 1100px) {
-  .folder:nth-child(1) .folder-tab { left: auto; right: 0; }
-  .folder:nth-child(2) .folder-tab { left: 50%; transform: translateX(-50%); }
-  .folder:nth-child(3) .folder-tab { left: 0; }
-  .folder:nth-child(4) .folder-tab { left: auto; right: 12%; }
-  .folder-note { display: none; }
-}
-
 @media (min-width: 761px) and (max-width: 1100px) {
   .items-two { grid-template-columns: minmax(0, 1fr); }
-  .builder { grid-template-columns: minmax(0, 1fr); }
-  .receipt { position: relative; top: 0; }
   .catnav-list { gap: 2px; }
   .catnav a { padding: 0 11px; }
   .postcard-message { grid-column: 1 / 7; }

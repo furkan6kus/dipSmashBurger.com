@@ -39,8 +39,10 @@ for (const cat of menu.categories) {
   }
   if (cat.extra) replace(`extra:${cat.id}`, `${esc(cat.extra.label)} <b>+${tl(cat.extra.price)}</b>`);
 }
-replace('menu-option', `+${tl(menu.menuOption.price)}`);
-replace('menu-data', `\n  <script type="application/json" id="menu-data">${JSON.stringify(menu)}</script>\n  `);
+if (menu.menuOption && html.includes('<!-- menu-option -->')) {
+  const o = menu.menuOption;
+  replace('menu-option', `Her burger menü olur: ${esc(o.includes.toLocaleLowerCase('tr'))} <b>+${tl(o.price)}</b>`);
+}
 
 writeFileSync(htmlPath, html);
 console.log('index.html updated from menu.json');
