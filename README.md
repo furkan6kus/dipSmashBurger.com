@@ -3,6 +3,15 @@
 Denizli'deki Dip Smash Burger'in menü sitesi. Tek sayfa, derleme gerektirmeyen düz HTML/CSS/JS.
 Masadaki QR kodu doğrudan menüye açmak için `https://dipsmashburger.com/#menu` adresini kullanın.
 
+## Yayın
+
+Site GitHub Pages'te yayında: **https://furkan6kus.github.io/dipSmashBurger.com/**
+(QR kod için: `https://furkan6kus.github.io/dipSmashBurger.com/#menu`)
+
+`claude/sweet-thompson-y3p7yr` branch'ine yapılan her push 1-2 dakika içinde otomatik yayına çıkar.
+`menu.json` değişince `.github/workflows/menu.yml` menüyü `index.html`'e kendisi yazar ve siteyi
+yeniden yayınlar; fiyatı GitHub sitesinden `menu.json`'u düzenleyerek değiştirmek yeterli.
+
 ## Menü ve fiyat güncelleme
 
 Menünün tek kaynağı `menu.json` dosyasıdır.
@@ -10,7 +19,8 @@ Menünün tek kaynağı `menu.json` dosyasıdır.
 1. `menu.json` içinde fiyatı, ürün adını ya da açıklamayı değiştirin. Yeni ürün eklemek için ilgili
    kategorinin `items` listesine `{ "name": "...", "price": 0, "desc": "..." }` ekleyin.
    Yeni ürün etiketi için `"new": true` yazın.
-2. Sayfayı güncelleyin:
+2. GitHub sitesinden düzenlediyseniz başka bir şey gerekmez, iş akışı sayfayı günceller.
+   Bilgisayarda düzenlediyseniz sayfayı güncelleyin:
 
    ```bash
    node scripts/build-menu.mjs

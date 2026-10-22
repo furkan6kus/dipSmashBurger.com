@@ -1,0 +1,51 @@
+# menu.json değişince menüyü index.html'e yazar ve GitHub Pages'i yeniden yayınlar.
+# Böylece fiyatı GitHub sitesinden menu.json'u düzenleyerek değiştirmek yeterli olur.
+name: Menüyü güncelle
+
+on:
+  push:
+    paths:
+      - menu.json
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: menu
+  cancel-in-progress: false
+
+jobs:
+  build-menu:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: menu.json'u index.html'e yaz
+        run: node scripts/build-menu.mjs
+
+      - name: Değiştiyse kaydet
+        id: commit
+        run: |
+          if git diff --quiet index.html; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "index.html zaten güncel."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Menüyü menu.json'dan güncelle"
+          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: GitHub Pages'i yeniden yayınla
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X POST "repos/${{ github.repository }}/pages/builds" || echo "Pages yeniden yayını istenemedi; bir sonraki push'ta yayınlanır."
