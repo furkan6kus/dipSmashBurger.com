@@ -83,12 +83,24 @@ a { color: inherit; }
 .insta:active { transform: scale(0.96); }
 @media (hover: hover) and (pointer: fine) { .insta:hover { background: var(--paper); color: var(--ink-strong); } }
 
-.hero-title { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: clamp(40px, 7svh, 72px); padding: 0 var(--margin) calc(76px + 4svh); text-align: center; }
+.hero-title { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: clamp(22px, 4svh, 48px); padding: 8px var(--margin) clamp(32px, 6svh, 72px); text-align: center; }
 .slogan { font-family: var(--font-hand); font-size: clamp(3.6rem, 1.2rem + 9.4vw, 10rem); line-height: 0.95; letter-spacing: 0.005em; text-transform: uppercase; }
 .slogan-line { display: block; }
 /* wider screens: one line each; a phone stacks it like a poster */
-@media (min-width: 761px) { .slogan { font-size: min(10rem, 10.6vw); } .slogan-line { white-space: nowrap; } }
+@media (min-width: 761px) { .slogan { font-size: min(10rem, 10.6vw, 15svh); } .slogan-line { white-space: nowrap; } }
 .slogan-dip { display: inline-block; padding: 0.16em 0.2em 0.04em; margin-left: 0.04em; background: var(--orange); color: var(--ink-strong); transform: rotate(-3deg); }
+
+/* the burger, pinned under the slogan like a photo; a tap opens it to turn */
+.hero-photo { position: relative; display: block; padding: 10px 10px 0; border: 0; background: var(--paper); color: var(--ink-strong); cursor: pointer; transform: rotate(-4deg); transition: transform 300ms var(--ease-out); -webkit-tap-highlight-color: transparent; }
+.hero-photo img { display: block; width: clamp(150px, 27svh, 320px); height: auto; aspect-ratio: 1; object-fit: cover; }
+.hero-photo-cap { display: block; padding: 6px 0 10px; font-family: var(--font-hand); font-size: clamp(1.3rem, 1.1rem + 0.6vw, 1.7rem); line-height: 1.1; }
+.hero-photo .thumb-badge { right: -14px; top: -14px; bottom: auto; width: 46px; height: 46px; }
+.hero-photo .thumb-badge svg { width: 24px; height: 24px; }
+.hero-photo:active { transform: rotate(-2deg) scale(0.97); }
+@media (hover: hover) and (pointer: fine) { .hero-photo:hover { transform: rotate(-1.5deg) scale(1.03); } }
+
+.thumb-badge { position: absolute; right: -8px; bottom: -8px; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--orange); color: var(--ink-strong); }
+.thumb-badge svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
 
 /* the way into the menu: the loudest thing on the screen */
 .cta { display: inline-flex; align-items: center; gap: 18px; min-height: clamp(64px, 3.6rem + 1vw, 80px); padding: 8px 10px 8px clamp(28px, 2vw + 16px, 40px); border-radius: 999px; background: var(--orange); color: var(--ink-strong); font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.6rem); font-weight: 800; letter-spacing: -0.01em; text-decoration: none; transition: transform var(--t-press) var(--ease-out), background-color var(--t-hover) ease; }
@@ -103,24 +115,29 @@ a { color: inherit; }
   .js .slogan-line { animation: rise 900ms var(--ease-expo) both; }
   .js .slogan-line + .slogan-line { animation-delay: 140ms; }
   .js .slogan-dip { animation: slap 700ms var(--ease-out) 700ms both; }
-  .js .cta { animation: rise 800ms var(--ease-out) 420ms both; }
+  .js .hero-photo { animation: pin 900ms var(--ease-expo) 380ms both; }
+  .js .cta { animation: rise 800ms var(--ease-out) 560ms both; }
+  .thumb-badge svg { animation: turn 3.2s var(--ease-out) 2.2s infinite; }
   .cta-arrow svg { animation: nudge 1.8s ease-in-out 1.6s infinite; }
 }
 @keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
 @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes slap { from { transform: rotate(-14deg) scale(1.5); opacity: 0; } to { transform: rotate(-3deg); opacity: 1; } }
+@keyframes pin { from { opacity: 0; transform: translateY(30px) rotate(6deg); } to { opacity: 1; transform: rotate(-4deg); } }
+@keyframes turn { 0%, 60% { transform: none; } 80%, 100% { transform: rotate(360deg); } }
 @keyframes nudge { 0%, 55%, 100% { transform: none; } 25% { transform: translateY(4px); } }
 
 /* ============ THE MENU ============ */
 /* the menu is set straight on the green; Dip's character, drawn in white lines, eats his way
-   through it behind the text. Hero, letter and postcard sit above him. */
+   through it behind the text. He is sticky inside the menu: still on the screen all the way
+   through it, and he leaves with its end instead of being covered by the next section. */
 .hero, .letter, .postcard { position: relative; z-index: 2; }
 .menu { position: relative; background: var(--table); color: var(--paper); padding-bottom: var(--section); }
-.menu > :not(.char-stage) { position: relative; z-index: 1; }
+.menu > :not(.char-track, .catnav) { position: relative; z-index: 1; }
 
-.char-stage { --char-h: min(calc(100svh - 110px), 46vw); position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; opacity: 0; transition: opacity 500ms ease; }
-.char-stage.is-on { opacity: 0.9; }
-.char-stage canvas { position: absolute; bottom: 0; left: var(--margin); height: var(--char-h); width: auto; aspect-ratio: 1; }
+.char-track { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.char-stage { --char-h: min(calc(100svh - 110px), 46vw); position: sticky; top: 0; height: 100svh; overflow: hidden; opacity: 0.9; }
+.char-stage canvas { position: absolute; top: calc(100svh - var(--char-h)); left: var(--margin); height: var(--char-h); width: auto; aspect-ratio: 1; }
 
 .catnav { position: sticky; top: 0; z-index: 20; width: var(--menu-w); margin: 0 auto; background: var(--table); padding: 12px 0 10px; }
 .catnav-list { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; margin: 0 -10px; padding: 0 10px; }
@@ -150,9 +167,39 @@ a { color: inherit; }
 .menu-note { margin-top: clamp(56px, 6vw, 88px); display: inline-block; padding: 12px 22px; border-radius: 24px; background: var(--paper); color: var(--ink-strong); font-size: var(--step-body); font-weight: 600; transform: rotate(1.5deg); }
 .menu-note b { font-weight: 800; white-space: nowrap; }
 .tag { display: inline-block; margin-left: 10px; padding: 3px 11px 4px; border-radius: 999px; background: var(--orange); color: var(--ink-strong); font-size: var(--step-small); font-weight: 700; letter-spacing: 0; vertical-align: 0.15em; line-height: 1.2; }
+.item-photo { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 18px; align-items: start; }
+.item-thumb { position: relative; display: block; width: 92px; aspect-ratio: 1; padding: 4px; border: 0; background: var(--paper); cursor: pointer; transform: rotate(-3deg); transition: transform 240ms var(--ease-out); -webkit-tap-highlight-color: transparent; }
+.item-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.item-thumb:active { transform: rotate(-1deg) scale(0.95); }
+@media (hover: hover) and (pointer: fine) { .item-thumb:hover { transform: rotate(0deg) scale(1.05); } }
 .items-two { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--gutter); }
 .items-compact { gap: 20px; }
 .items-compact .item-head { font-weight: 650; }
+
+/* ============ A BURGER TO TURN ============ */
+html.spin-open { overflow: hidden; }
+.spin { width: min(560px, calc(100% - 24px)); max-width: none; max-height: calc(100svh - 24px); padding: 0; border: 0; background: transparent; color: var(--ink); overflow: visible; }
+.spin::backdrop { background: rgb(22 32 20 / 0.86); }
+.spin[open] { animation: spin-in 420ms var(--ease-expo); }
+.spin[open]::backdrop { animation: fade 300ms ease; }
+@keyframes spin-in { from { opacity: 0; transform: translateY(24px) scale(0.96); } to { opacity: 1; transform: none; } }
+.spin-card { position: relative; background: var(--paper); padding: 10px 10px 0; }
+.spin-stage { position: relative; aspect-ratio: 1; background: var(--kraft) center / cover no-repeat; touch-action: none; cursor: grab; user-select: none; -webkit-user-select: none; }
+.spin-stage:active { cursor: grabbing; }
+.spin-stage:focus-visible { outline-offset: -3px; }
+.spin-stage canvas { display: block; width: 100%; height: 100%; }
+.spin-hint { position: absolute; left: 50%; bottom: 16px; display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 999px; background: var(--ink-strong); color: var(--paper); font-size: var(--step-small); font-weight: 650; white-space: nowrap; transform: translateX(-50%); transition: opacity 400ms ease; pointer-events: none; }
+.spin-hint svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.spin-stage.is-touched .spin-hint { opacity: 0; }
+.spin-info { padding: 18px 12px 22px; }
+.spin-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
+.spin-name { font-family: var(--font-hand); font-size: var(--step-head); line-height: 1; color: var(--brand); }
+.spin-price { font-size: var(--step-lead); font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.spin-desc { margin-top: 8px; font-size: var(--step-body); }
+.spin-close { position: absolute; top: -14px; right: -10px; display: grid; place-items: center; width: 48px; height: 48px; border: 0; border-radius: 50%; background: var(--orange); color: var(--ink-strong); cursor: pointer; transition: transform var(--t-press) var(--ease-out); }
+.spin-close svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; }
+.spin-close:active { transform: scale(0.92); }
+@media (max-height: 640px) { .spin { width: min(560px, calc(100% - 24px), calc((100svh - 150px) + 20px)); } }
 
 /* ============ THE LETTER ============ */
 .letter { display: flex; flex-direction: column; align-items: center; padding: 0 var(--margin) var(--section); background: var(--table); overflow-x: clip; }
@@ -198,9 +245,10 @@ a { color: inherit; }
 /* ============ NARROW: one column; the character stands behind the text, faint ============ */
 @media (max-width: 899px) {
   .sheet-body { width: auto; margin-left: 0; }
-  .char-stage { --char-h: min(74svh, 150vw); }
-  .char-stage.is-on { opacity: 0.24; }
-  .char-stage canvas { left: 50%; transform: translateX(-50%); }
+  /* big, in the middle of the screen below the menu bar; the drawing's body sits at 45% of its width */
+  .char-stage { --char-h: min(calc(100svh - 90px), 190vw); }
+  .char-stage { opacity: 0.22; }
+  .char-stage canvas { top: calc(64px + (100svh - 64px - var(--char-h)) / 2); left: 50%; transform: translateX(-45%); }
 }
 
 /* ============ PHONE ============ */
@@ -208,12 +256,16 @@ a { color: inherit; }
   :root { --menu-w: calc(100% - 40px); --sheet-w: calc(100% - 24px); --sheet-pad: 22px; }
   .topbar { height: 64px; }
   .topbar-mark svg { width: 34px; height: 38px; }
-  .hero-title { padding-bottom: calc(64px + 4svh); }
 
   .catnav { padding: 10px 12px 8px; }
   .catnav a { padding: 0 14px; }
 
-  .items-two { grid-template-columns: minmax(0, 1fr); }
+  .item-photo { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 18px; align-items: start; }
+.item-thumb { position: relative; display: block; width: 92px; aspect-ratio: 1; padding: 4px; border: 0; background: var(--paper); cursor: pointer; transform: rotate(-3deg); transition: transform 240ms var(--ease-out); -webkit-tap-highlight-color: transparent; }
+.item-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.item-thumb:active { transform: rotate(-1deg) scale(0.95); }
+@media (hover: hover) and (pointer: fine) { .item-thumb:hover { transform: rotate(0deg) scale(1.05); } }
+.items-two { grid-template-columns: minmax(0, 1fr); }
   .items { gap: 28px; }
   .items-compact { gap: 14px; }
   .cat-head { margin-bottom: 24px; }
@@ -227,7 +279,12 @@ a { color: inherit; }
 }
 
 @media (min-width: 761px) and (max-width: 1100px) {
-  .items-two { grid-template-columns: minmax(0, 1fr); }
+  .item-photo { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 18px; align-items: start; }
+.item-thumb { position: relative; display: block; width: 92px; aspect-ratio: 1; padding: 4px; border: 0; background: var(--paper); cursor: pointer; transform: rotate(-3deg); transition: transform 240ms var(--ease-out); -webkit-tap-highlight-color: transparent; }
+.item-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.item-thumb:active { transform: rotate(-1deg) scale(0.95); }
+@media (hover: hover) and (pointer: fine) { .item-thumb:hover { transform: rotate(0deg) scale(1.05); } }
+.items-two { grid-template-columns: minmax(0, 1fr); }
   .catnav-list { gap: 2px; }
   .catnav a { padding: 0 11px; }
   .postcard-message { grid-column: 1 / 7; }

@@ -40,6 +40,9 @@ Menünün tek kaynağı `menu.json` dosyasıdır.
 | `assets/site.css` | Tüm stiller. Renkler ve yazı boyutları en üstte. |
 | `assets/site.js` | Kayarak belirme, menü çubuğu. |
 | `assets/character.js` | Kaydırmayla oynayan karakter. |
+| `assets/spin.js` | Fotoğraflı ürünü parmakla çevirme penceresi. |
+| `assets/products/` | Ürün fotoğrafları ve çevirme kareleri. |
+| `scripts/build-product.py` | Ürün videosundan fotoğraf ve kareleri üretir. |
 | `assets/character/` | Karakter videosunun kareleri (beyaz çizgi, şeffaf). |
 | `scripts/build-character.py` | Videodan kareleri üretir. |
 | `assets/fonts/` | Indie Flower ve Bricolage Grotesque (ikisi de SIL Open Font License). |
@@ -47,11 +50,27 @@ Menünün tek kaynağı `menu.json` dosyasıdır.
 
 ## Açılış ekranı
 
-Yeşil zeminde "TASTE THE SMASH. LOVE THE DIP!" sloganı ve turuncu "Menüyü keşfet" butonu var.
+Yeşil zeminde "TASTE THE SMASH. LOVE THE DIP!" sloganı, altında hafif yamuk bir fotoğraf (Dip Purple)
+ve turuncu "Menüyü keşfet" butonu var. Fotoğrafa basınca burgeri çevirme penceresi açılır.
 Buton sayfayı menüye kaydırır. Sol üstte dip işareti, sağ üstte Instagram butonu
 (`https://www.instagram.com/dipsmashburger/`) durur.
 
 "Menü yap" hesaplayıcısı ve adisyon şimdilik kaldırıldı. Gerekirse git geçmişinden geri getirilebilir.
+
+## Fotoğraflı ürünler (deneme: Dip Purple)
+
+`menu.json`'da bir ürüne `"photo": "dip-purple"` yazınca menüde ürünün yanına küçük bir resim gelir.
+Resme basınca pencere açılır; müşteri parmağıyla sağa sola kaydırıp burgeri çevirir (videonun kareleri).
+Kareler yalnızca pencere açılınca yüklenir (toplam ~1,5 MB).
+
+Yeni bir ürün videosu için (1080x1920 dikey video, burger ortada):
+
+```bash
+python3 scripts/build-product.py video.mp4 urun-adi   # assets/products/urun-adi/ oluşur
+node scripts/build-menu.mjs                            # menüye resmi ekler
+```
+
+Giriş ekranındaki fotoğraf `index.html` içindeki `hero-photo` butonudur.
 
 ## Kaydırınca hareket eden karakter
 
@@ -59,7 +78,8 @@ Menü yeşil zeminde, Dip'in karakteri beyaz çizgilerle arkada duruyor. Kaydır
 patatese, kolaya ve kurabiyeye geçiyor; yukarı kaydırınca geri sarıyor. Menü boyunca hiç kaybolmuyor.
 
 - **Geniş ekranda (900 px ve üstü):** karakter solda büyük durur, menü sağ sütunda akar.
-- **Telefonda:** karakter yazıların arkasında, okunurluğu bozmayacak kadar soluk durur.
+- **Telefonda:** karakter ekranın ortasında büyük ve yazıların arkasında, okunurluğu bozmayacak kadar soluk durur.
+- Menü boyunca ekrandaki yeri hiç değişmez, sadece video oynar. Menü bitince sayfayla birlikte yukarı çıkar.
 
 Videonun beyaz zemini (karakterin içi dahil) silinir, çizgiler beyaz yapılır ve her kare ayrı bir
 şeffaf WebP olarak kaydedilir (`assets/character/720/` masaüstü, `assets/character/480/` telefon).

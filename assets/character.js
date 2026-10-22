@@ -2,6 +2,7 @@
 // Frames are small transparent WebPs (assets/character/{720,480}/NNN.webp) drawn on one fixed
 // canvas, so scrolling moves the video forward and back smoothly on every phone.
 // Each part of the menu is pinned to a moment of the video (ANCHORS): burger, fries, cola, cookie.
+// He stands in one place on the screen (see .char-stage in site.css); only the video moves.
 
 (() => {
   const stage = document.querySelector('.char-stage');
@@ -17,7 +18,6 @@
 
   const q = (s) => document.querySelector(s);
   const menu = q('#menu');
-  const last = q('.sheet-second .sheet-body');
   const ANCHORS = [
     ['#smash', 'top', 0],
     ['#tavuk', 'top', 2.9],
@@ -93,10 +93,7 @@
   function tick() {
     raf = 0;
     if (loadedSize !== size()) { reset(); pump(); }
-    const m = menu.getBoundingClientRect(), l = last.getBoundingClientRect(), vh = innerHeight;
-    // on from the moment the menu comes up until its last part has gone by
-    const on = m.top < vh * 0.75 && l.bottom > vh * 0.25;
-    stage.classList.toggle('is-on', on);
+    const m = menu.getBoundingClientRect(), vh = innerHeight;
     if (!started && m.top < vh * 2.5) { started = true; pump(); }
 
     let target = pageTime();

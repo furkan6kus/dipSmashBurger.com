@@ -37,6 +37,11 @@
 
     <div class="hero-title" id="top">
       <h1 class="slogan" lang="en"><span class="slogan-line">Taste the smash.</span> <span class="slogan-line">Love the <span class="slogan-dip">dip!</span></span></h1>
+      <button class="hero-photo" type="button" data-spin="assets/products/dip-purple" data-frames="72" data-poster="36" aria-label="Dip Purple: fotoğrafı aç, parmağınla çevir">
+        <img src="assets/products/dip-purple/photo-600.webp" srcset="assets/products/dip-purple/photo-600.webp 600w, assets/products/dip-purple/photo-900.webp 900w" sizes="(min-width: 761px) 320px, 240px" alt="" width="600" height="600" fetchpriority="high">
+        <span class="hero-photo-cap">Dip Purple</span>
+        <span class="thumb-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 13.7-5.6M20 12a8 8 0 0 1-13.7 5.6M17.7 2.6v3.8h-3.8M6.3 21.4v-3.8h3.8"/></svg></span>
+      </button>
       <a class="cta" href="#menu">
         <span>Menüyü keşfet</span>
         <span class="cta-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4v15M5.5 12.5 12 19l6.5-6.5"/></svg></span>
@@ -46,7 +51,7 @@
 
   <main id="menu" class="menu">
 
-    <div class="char-stage" aria-hidden="true"><canvas></canvas></div>
+    <div class="char-track" aria-hidden="true"><div class="char-stage"><canvas></canvas></div></div>
 
     <nav class="catnav" aria-label="Menüde gezin">
       <ul class="catnav-list">
@@ -96,9 +101,15 @@
           </div>
           <ul class="items items-two" data-stagger>
             <!-- menu:tavuk -->
-        <li class="item">
-          <h3 class="item-head"><span class="item-name">Dip Purple</span> <span class="price">310 ₺</span></h3>
-          <p class="item-desc">120 gr tavuk, mor lahana turşusu, ballı hardal, mayonez.</p>
+        <li class="item item-photo">
+          <button class="item-thumb" type="button" data-spin="assets/products/dip-purple" data-frames="72" data-poster="36" aria-label="Dip Purple: fotoğrafı aç, parmağınla çevir">
+            <img src="assets/products/dip-purple/thumb.webp" alt="" width="120" height="120" loading="lazy" decoding="async">
+            <span class="thumb-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 13.7-5.6M20 12a8 8 0 0 1-13.7 5.6M17.7 2.6v3.8h-3.8M6.3 21.4v-3.8h3.8"/></svg></span>
+          </button>
+          <div class="item-text">
+            <h3 class="item-head"><span class="item-name">Dip Purple</span> <span class="price">310 ₺</span></h3>
+            <p class="item-desc">120 gr tavuk, mor lahana turşusu, ballı hardal, mayonez.</p>
+          </div>
         </li>
         <li class="item">
           <h3 class="item-head"><span class="item-name">Dip Sorrel</span> <span class="price">320 ₺</span></h3>
@@ -272,7 +283,23 @@
     </div>
   </footer>
 
+  <!-- ============ a burger to turn with a finger (assets/spin.js) ============ -->
+  <dialog class="spin" aria-labelledby="spin-name">
+    <div class="spin-card">
+      <div class="spin-stage" tabindex="0" role="slider" aria-label="Burgeri çevir" aria-valuemin="0" aria-valuemax="71" aria-valuenow="36">
+        <canvas width="640" height="640"></canvas>
+        <p class="spin-hint" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 7 3 12l5 5M16 7l5 5-5 5M3 12h18"/></svg> Sağa sola kaydırıp çevir</p>
+      </div>
+      <div class="spin-info">
+        <h2 class="spin-head"><span class="spin-name" id="spin-name"></span> <span class="spin-price"></span></h2>
+        <p class="spin-desc"></p>
+      </div>
+      <form method="dialog"><button class="spin-close" aria-label="Kapat"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></form>
+    </div>
+  </dialog>
+
   <script src="assets/site.js" defer></script>
+  <script src="assets/spin.js" defer></script>
   <script src="assets/character.js" defer></script>
 </body>
 </html>

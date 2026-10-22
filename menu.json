@@ -17,7 +17,7 @@
       "title": "Tavuk burgerler",
       "extra": { "label": "Ekstra 120 gr tavuk", "price": 100 },
       "items": [
-        { "name": "Dip Purple", "price": 310, "desc": "120 gr tavuk, mor lahana turşusu, ballı hardal, mayonez." },
+        { "name": "Dip Purple", "photo": "dip-purple", "price": 310, "desc": "120 gr tavuk, mor lahana turşusu, ballı hardal, mayonez." },
         { "name": "Dip Sorrel", "price": 320, "desc": "120 gr tavuk, yanık kuzu sos, sweet chili sos, turşu relish, iceberg marul." },
         { "name": "Dip Chicken", "price": 300, "desc": "120 gr tavuk, sweet chili sos, mayonez, turşu." }
       ]
