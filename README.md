@@ -94,7 +94,6 @@ Hangi bölümün videonun hangi saniyesine denk geldiği `assets/character.js` i
 
 ## Yayına almadan önce onaylanacaklar
 
-- **İletişim:** açık adres, çalışma saatleri, telefon (alt kısımda "yakında" yazıyor).
 - **Dip Sorrel:** menü PDF'inde "yanık kuzu sos" yazıyor, kuzukulağı sos olabilir.
 - **"Neden smash?" metni:** smash tekniğini anlatan örnek metin; işletmenin ağzından onaylanmalı.
 - **Trüf & Parmesan:** "Trüflü, parmesanlı patates." açıklaması tarafımızdan eklendi.

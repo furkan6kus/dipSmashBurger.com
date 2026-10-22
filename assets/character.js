@@ -21,16 +21,17 @@
   const ANCHORS = [
     ['#smash', 'top', 0],
     ['#tavuk', 'top', 2.9],
-    ['.sheet-first .sheet-body', 'bottom', 4.2],
-    ['#kizartmalar', 'top', 4.25],
-    ['#soslar', 'top', 6.1],
+    ['#tavuk .items', 'bottom', 5.1],             // past the last burger the fries are handed over,
+    ['.sheet-first .sheet-body', 'bottom', 5.45], // so they are in his hands as their heading comes up
+    ['#kizartmalar', 'top', 5.7],
+    ['#soslar', 'top', 6.0],
     ['#icecekler', 'top', 6.7],
     ['#tatli', 'top', 8.4],
     ['.sheet-second .sheet-body', 'bottom', END],
   ].map(([sel, edge, t]) => ({ el: q(sel), edge, t })).filter((a) => a.el);
 
   // with reduced motion: one still per scene, no in-betweens
-  const STILLS = [[4.22, 1.9], [6.6, 5.4], [8.4, 7.8], [Infinity, 9.4]];
+  const STILLS = [[5.0, 1.9], [6.6, 5.6], [8.4, 7.8], [Infinity, 9.4]];
   const still = (t) => STILLS.find(([until]) => t <= until)[1];
 
   // ---------- frames: loaded nearest-first once the menu is close ----------
