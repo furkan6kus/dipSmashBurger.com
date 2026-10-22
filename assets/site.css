@@ -232,7 +232,8 @@ html.spin-open { overflow: hidden; }
 .address { display: grid; gap: 14px; }
 .address div { display: grid; grid-template-columns: 7.5rem 1fr; gap: 16px; font-size: var(--step-lead); line-height: 1.35; }
 .address dt { font-weight: 700; }
-.imprint { grid-column: 1 / -1; margin-top: clamp(56px, 7vw, 96px); text-align: center; font-size: var(--step-small); color: var(--soft); }
+.legal { grid-column: 1 / -1; margin-top: clamp(56px, 7vw, 96px); padding-top: 22px; border-top: 5px dotted var(--sage); text-align: center; font-size: var(--step-body); color: var(--ink); }
+.imprint { grid-column: 1 / -1; margin-top: 18px; text-align: center; font-size: var(--step-small); color: var(--soft); }
 
 /* ---------- reveals: content stays visible without script ---------- */
 @media (prefers-reduced-motion: no-preference) {
@@ -273,6 +274,7 @@ html.spin-open { overflow: hidden; }
   .cat-head { margin-bottom: 24px; }
 
   .postcard-card { grid-template-columns: minmax(0, 1fr); row-gap: 48px; }
+  .imprint { margin-top: -30px; }  /* the row gap above is for the sections, not this line */
   .postcard-message, .postcard-address { grid-column: 1 / -1; }
   .postcard-address { padding-top: 0; }
   .stamp { position: absolute; top: -132px; width: 68px; }
